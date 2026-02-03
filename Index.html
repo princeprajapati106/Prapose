@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Final Proposal 💍</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  background: radial-gradient(circle, #120018, #000);
+  font-family: system-ui, sans-serif;
+}
+canvas { position: fixed; inset: 0; }
+
+/* MAIN TEXT */
+#text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(2.2rem, 6vw, 4.8rem);
+  color: white;
+  text-align: center;
+  letter-spacing: 0.3rem;
+  text-shadow: 0 0 10px pink, 0 0 40px hotpink;
+  white-space: pre-line;
+  z-index: 5;
+}
+
+#heart {
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  opacity: 0;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* BUTTON */
+#storyBtn {
+  position: absolute;
+  top: 72%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 14px 30px;
+  border-radius: 30px;
+  border: none;
+  background: linear-gradient(45deg, hotpink, red);
+  color: white;
+  cursor: pointer;
+  opacity: 0;
+}
+
+/* POPUP */
+#popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+}
+
+#popupContent {
+  background: #1a001f;
+  color: #fff;
+  max-width: 600px;
+  width: 90%;
+  border-radius: 20px;
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 0 30px hotpink;
+}
+
+#popupContent h2 {
+  font-family: 'Great Vibes', cursive;
+  font-size: 2.8rem;
+  color: pink;
+}
+
+#popupText {
+  margin-top: 15px;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  white-space: pre-line;
+  min-height: 80px;
+}
+
+/* ❤️ SINGLE HEART */
+#heartWrap {
+  position: relative;
+  width: 240px;
+  height: 220px;
+  margin: 20px auto;
+  display: none;
+}
+
+#singleHeart {
+  width: 100%;
+  height: 100%;
+  fill: url(#grad);
+  filter:
+    drop-shadow(0 0 15px hotpink)
+    drop-shadow(0 0 35px rgba(255,20,147,0.8))
+    drop-shadow(0 0 60px rgba(255,0,0,0.6));
+  animation: heartBeat 1.6s infinite;
+}
+
+@keyframes heartBeat {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+#proposalImg {
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  border-radius: 14px;
+  z-index: 2;
+}
+
+/* 💍 RING */
+#ring {
+  font-size: 4rem;
+  margin: 15px 0;
+  opacity: 0;
+  animation: ringDrop 1.5s ease forwards;
+  display: none;
+}
+
+@keyframes ringDrop {
+  0% { transform: translateY(-40px) scale(0); opacity: 0; }
+  60% { transform: translateY(10px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+#closeBtn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, gold, hotpink);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px gold;
+}
+</style>
+</head>
+
+<body>
+
+<canvas></canvas>
+
+<div id="text"></div>
+<div id="heart">❤️</div>
+<button id="storyBtn">❤️ Read Our Story</button>
+
+<div id="popup">
+  <div id="popupContent">
+    <h2 id="popupHeading">Our Love Story</h2>
+    <div id="popupText">
+      From the first moment I saw you,<br><br>
+      my heart chose you… forever ❤️
+    </div>
+
+    <div id="heartWrap">
+      <svg id="singleHeart" viewBox="0 0 512 512">
+        <defs>
+          <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="hotpink"/>
+            <stop offset="100%" stop-color="red"/>
+          </linearGradient>
+        </defs>
+        <path d="M256 472s-44-40-96-84C88 328 32 272 32 192 32 117 90 64 160 64c44 0 76 24 96 52 20-28 52-52 96-52 70 0 128 53 128 128 0 80-56 136-128 196-52 44-96 84-96 84z"/>
+      </svg>
+
+      <img src="./Prapose.png" id="proposalImg">
+    </div>
+
+    <div id="ring"></div>
+    <button id="closeBtn">Say you something</button>
+  </div>
+</div>
+
+<script>
+const canvas = document.querySelector("canvas");
+const c = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+resize();
+addEventListener("resize", resize);
+
+class Particle {
+  constructor(x,y,dx,dy,color){
+    this.x=x; this.y=y;
+    this.dx=dx; this.dy=dy;
+    this.life=1; this.color=color;
+  }
+  update(){
+    this.x+=this.dx;
+    this.y+=this.dy;
+    this.dy+=0.02;
+    this.life-=0.01;
+    c.beginPath();
+    c.arc(this.x,this.y,2,0,Math.PI*2);
+    c.fillStyle=this.color;
+    c.shadowBlur=15;
+    c.shadowColor=this.color;
+    c.fill();
+  }
+}
+
+let particles=[];
+function explode(x,y){
+  const colors=["#ff4d6d","#ffb3c6","#fff"];
+  for(let i=0;i<40;i++){
+    const a=Math.random()*Math.PI*2;
+    const s=Math.random()*4;
+    particles.push(
+      new Particle(x,y,Math.cos(a)*s,Math.sin(a)*s,colors[Math.floor(Math.random()*3)])
+    );
+  }
+}
+
+const textEl=document.getElementById("text");
+const heartEl=document.getElementById("heart");
+const btn=document.getElementById("storyBtn");
+
+const lines=["I Love You ❤️","You Are My Forever","Will You Marry Me?"];
+let l=0,ch=0,out="";
+
+function typeMain(){
+  if(ch<lines[l].length){
+    out+=lines[l][ch++];
+    textEl.innerHTML=out;
+    setTimeout(typeMain,120);
+  } else {
+    out+="\n";
+    l++; ch=0;
+    if(l<lines.length) setTimeout(typeMain,700);
+    else { heartEl.style.opacity=1; btn.style.opacity=1; }
+  }
+}
+setTimeout(typeMain,1000);
+
+const popup=document.getElementById("popup");
+const heading=document.getElementById("popupHeading");
+const popupText=document.getElementById("popupText");
+const ring=document.getElementById("ring");
+const closeBtn=document.getElementById("closeBtn");
+
+let step=0;
+btn.onclick=()=> popup.style.display="flex";
+
+closeBtn.onclick=()=>{
+  popupText.textContent="";
+  ring.style.display="none";
+  document.getElementById("heartWrap").style.display="none";
+
+  if(step===0){
+    heading.textContent="I want to say you something";
+    typeText("kuch bolna hai\nphone kr ke kuch bol do ❤️");
+    closeBtn.textContent="Proposal ❤️";
+    step++;
+  } else {
+    heading.textContent="Final Proposal";
+    document.getElementById("heartWrap").style.display="block";
+    ring.style.display="block";
+    typeText(
+      "Is ring ke sath\napni puri zindagi tumhe dena chahta hoon ❤️\n\nWill you marry me?"
+    );
+    closeBtn.textContent="💖 Accept";
+  }
+};
+
+function typeText(msg){
+  popupText.textContent="";
+  let i=0;
+  (function t(){
+    if(i<msg.length){
+      popupText.textContent+=msg[i++];
+      setTimeout(t,80);
+    }
+  })();
+}
+
+function animate(){
+  requestAnimationFrame(animate);
+  c.fillStyle="rgba(0,0,0,0.25)";
+  c.fillRect(0,0,canvas.width,canvas.height);
+  if(Math.random()<0.05)
+    explode(Math.random()*canvas.width,Math.random()*canvas.height*0.6);
+  particles.forEach((p,i)=>{
+    p.update();
+    if(p.life<=0) particles.splice(i,1);
+  });
+}
+animate();
+</script>
+
+</body>
+</html>
