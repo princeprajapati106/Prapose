@@ -176,6 +176,35 @@ canvas { position:fixed; inset:0; }
   box-shadow:0 0 15px gold;
 }
 
+/* CELEBRATION SCREEN */
+#celebrationScreen {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  z-index:1000;
+  text-align:center;
+  padding:20px;
+}
+
+.celebrationContent {
+  background:linear-gradient(135deg, #1a001f, #2a003f);
+  border-radius:20px;
+  padding:40px 30px;
+  max-width:600px;
+  width:90%;
+  box-shadow:0 0 50px hotpink, 0 0 100px rgba(255,20,147,0.5);
+  animation:celebrateAppear 1s ease-out;
+}
+
+@keyframes celebrateAppear {
+  0% { transform:scale(0.8); opacity:0; }
+  100% { transform:scale(1); opacity:1; }
+}
+
 /* MOBILE TUNING */
 @media(max-width:480px){
   #text { top:36%; }
@@ -183,6 +212,63 @@ canvas { position:fixed; inset:0; }
   #storyBtn { top:74%; }
   #popupContent { padding:15px; }
   #popupText { font-size:0.95rem; line-height:1.5; }
+  .celebrationContent { padding:30px 20px; }
+}
+
+/* FINAL MESSAGE STYLES */
+.final-message-overlay {
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.9);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:2000;
+}
+
+.final-message-content {
+  background:rgba(26,0,31,0.95);
+  color:white;
+  padding:30px;
+  border-radius:20px;
+  text-align:center;
+  box-shadow:0 0 50px hotpink;
+  max-width:500px;
+  width:90%;
+}
+
+.final-message-content h2 {
+  font-family:'Great Vibes', cursive;
+  font-size:2.5rem;
+  color:gold;
+  margin-bottom:20px;
+}
+
+.final-message-content p {
+  margin-bottom:25px;
+  line-height:1.6;
+}
+
+.call-button {
+  display:inline-block;
+  padding:12px 30px;
+  border:none;
+  border-radius:20px;
+  background:linear-gradient(45deg, hotpink, red);
+  color:white;
+  cursor:pointer;
+  font-size:1.1rem;
+  text-decoration:none;
+  margin-top:10px;
+  transition:transform 0.3s, box-shadow 0.3s;
+}
+
+.call-button:hover {
+  transform:scale(1.05);
+  box-shadow:0 0 20px hotpink;
 }
 </style>
 </head>
@@ -233,6 +319,24 @@ canvas { position:fixed; inset:0; }
 
     <div id="ring">💍</div>
     <button id="closeBtn">Say you something</button>
+  </div>
+</div>
+
+<!-- CELEBRATION SCREEN -->
+<div id="celebrationScreen">
+  <div class="celebrationContent">
+    <div style="font-size:5rem; margin-bottom:20px; animation:pulse 1s infinite;">🎉💖💍</div>
+    <h2 style="font-family:'Great Vibes', cursive; font-size:3.5rem; color:hotpink; margin-bottom:20px;">
+      Congratulations!
+    </h2>
+    <p style="color:#fff; font-size:1.2rem; line-height:1.6; margin-bottom:30px;">
+      You have made me the happiest person in the world!<br>
+      Our journey together as fiancés begins now...<br>
+      I can't wait to spend forever with you! ❤️
+    </p>
+    <button id="finalJourneyBtn" style="margin-top:20px; padding:12px 30px; border:none; border-radius:25px; background:linear-gradient(45deg, gold, hotpink); color:white; font-size:1rem; cursor:pointer; box-shadow:0 0 20px gold;">
+      Start Our Journey Together
+    </button>
   </div>
 </div>
 
@@ -291,9 +395,14 @@ const popupText=document.getElementById("popupText");
 const ring=document.getElementById("ring");
 const closeBtn=document.getElementById("closeBtn");
 const heartWrap=document.getElementById("heartWrap");
+const celebrationScreen=document.getElementById("celebrationScreen");
+const finalJourneyBtn=document.getElementById("finalJourneyBtn");
+
 let step=0;
 let isTyping = false;
 let typeTimeout = null;
+
+let currentFullText = "";
 
 btn.onclick=()=> popup.style.display="flex";
 
@@ -359,11 +468,19 @@ closeBtn.onclick = () => {
     currentFullText = proposalText;
     closeBtn.textContent="💖 Accept";
     step++;
+  } else if(step===2){
+    // Accept button clicked - show celebration screen directly
+    popup.style.display="none";
+    celebrationScreen.style.display="flex";
+    
+    // Create celebration particles
+    for(let i=0; i<30; i++){
+      setTimeout(() => {
+        explode(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+      }, i*100);
+    }
   }
 };
-
-// Store current full text for immediate display
-let currentFullText = "";
 
 // --- TYPEWRITER FOR POPUP ---
 function typeText(msg){
@@ -376,12 +493,41 @@ function typeText(msg){
     if(i<msg.length && isTyping){
       popupText.textContent+=msg[i++];
       popupText.scrollTop = popupText.scrollHeight;
-      typeTimeout = setTimeout(t, 40); // Slightly faster typing
+      typeTimeout = setTimeout(t, 80); // Slightly faster typing
     } else {
       isTyping = false;
     }
   })();
 }
+
+// --- FINAL JOURNEY BUTTON ---
+finalJourneyBtn.onclick = () => {
+  celebrationScreen.style.display = "none";
+  
+  // Create final celebration with more particles
+  for(let i=0; i<50; i++){
+    setTimeout(() => {
+      explode(Math.random()*window.innerWidth, Math.random()*window.innerHeight);
+    }, i*80);
+  }
+  
+  // Show final message with CALL BUTTON
+  const finalMsg = document.createElement("div");
+  finalMsg.className = "final-message-overlay";
+  finalMsg.innerHTML = `
+    <div class="final-message-content">
+      <h2>Our Journey Begins!</h2>
+      <p style="margin-bottom:25px; line-height:1.6;">
+        From this moment forward, we walk hand in hand through life's adventures.<br>
+        Thank you for saying YES! ❤️💍
+      </p>
+      <a href="tel:8853515454" class="call-button" style="margin-right:10px;">
+        Forever Yours 📞
+      </a>
+    </div>
+  `;
+  document.body.appendChild(finalMsg);
+};
 </script>
 
 </body>
