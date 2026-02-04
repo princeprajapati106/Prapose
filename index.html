@@ -308,11 +308,11 @@ canvas { position:fixed; inset:0; }
 
 <div id="text"></div>
 <div id="heart"></div>
-<button id="storyBtn">❤️ Read Our Story</button>
+<button id="storyBtn">💖 Read Our Journey 💖</button>
 
 <div id="popup">
   <div id="popupContent">
-    <h2 id="popupHeading">Our Love Story</h2>
+    <h2 id="popupHeading">Our Journey</h2>
     <div id="popupText">
       Ek auto ka chhota sa safar,
       aur tumhare diye hue 10 rupaye —
@@ -346,8 +346,8 @@ canvas { position:fixed; inset:0; }
       <img src="./Prapose.png" id="proposalImg">
     </div>
 
-    <div id="ring">💍</div>
-    <button id="closeBtn">Say you something</button>
+    <div id="ring"></div>
+    <button id="closeBtn">Unfold My Heart ❤️</button>
   </div>
 </div>
 
@@ -412,7 +412,8 @@ const lines=[
   "I Love You More Than Words Can Say ❤️",
   "You Are My Forever",
   "My Soulmate, My Best Friend",
-  "Will You Marry Me? 💍"
+  "Will You Marry Me? 💍",
+  "❤️"
 ];
 let l=0,ch=0,out="";
 function typeMain(){
@@ -454,7 +455,7 @@ closeBtn.onclick = () => {
   heartWrap.style.display="none";
 
   if(step===0){
-    heading.textContent = "I want to say you something";
+    heading.textContent = "I Want To Share Something Special";
     // Long message with scrollbar
     const longMessage = `Hi Anjali,
 
@@ -530,7 +531,7 @@ Bas itna hi.`;
     
     typeText(longMessage);
     currentFullText = longMessage;
-    closeBtn.textContent="Proposal ❤️";
+    closeBtn.textContent="💕 Continue to Proposal";
     step++;
   } else if(step===1){
     heading.textContent="Final Proposal";
@@ -548,7 +549,7 @@ Bas itna hi.`;
             Will you be my wife? 💖💍`;
     typeText(proposalText);
     currentFullText = proposalText;
-    closeBtn.textContent="💖 Accept";
+    closeBtn.textContent="💖 Yes, I Will! 💖";
     step++;
   } else if(step===2){
     // Accept button clicked - show celebration screen directly
