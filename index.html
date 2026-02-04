@@ -407,7 +407,13 @@ animate();
 const textEl=document.getElementById("text");
 const heartEl=document.getElementById("heart");
 const btn=document.getElementById("storyBtn");
-const lines=["Hi Anjali,","You Are My Forever","I Love You ❤️","Will You Marry Me?","❤️"];
+const lines=[
+  "My Dearest Anjali,",
+  "I Love You More Than Words Can Say ❤️",
+  "You Are My Forever",
+  "My Soulmate, My Best Friend",
+  "Will You Marry Me? 💍"
+];
 let l=0,ch=0,out="";
 function typeMain(){
   if(ch<lines[l].length){ out+=lines[l][ch++]; textEl.innerHTML=out; setTimeout(typeMain,120); }
