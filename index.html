@@ -25,7 +25,7 @@ canvas { position:fixed; inset:0; }
   top:38%;
   left:50%;
   transform:translate(-50%, -50%);
-  font-family:'Great Vibes', cursive;
+  font-family: cursive;
   font-size:clamp(1.8rem, 7vw, 4.8rem);
   color:white;
   text-align:center;
@@ -109,8 +109,37 @@ canvas { position:fixed; inset:0; }
   white-space:pre-line;
   margin-bottom:15px;
   /* Default: no scroll */
-  overflow:visible;
+  overflow-y: visible;
   max-height:none;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+/* Long message specific styles */
+.long-message {
+  overflow-y: auto !important;
+  max-height: 300px !important;
+  text-align: left !important;
+  padding-right: 10px !important;
+}
+
+/* Scrollbar styling */
+.long-message::-webkit-scrollbar {
+  width: 8px;
+}
+
+.long-message::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.long-message::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, hotpink, pink);
+  border-radius: 10px;
+}
+
+.long-message::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #ff1493, #ff69b4);
 }
 
 /* SINGLE HEART & IMAGE */
@@ -278,7 +307,7 @@ canvas { position:fixed; inset:0; }
 <canvas></canvas>
 
 <div id="text"></div>
-<div id="heart">❤️</div>
+<div id="heart"></div>
 <button id="storyBtn">❤️ Read Our Story</button>
 
 <div id="popup">
@@ -378,7 +407,7 @@ animate();
 const textEl=document.getElementById("text");
 const heartEl=document.getElementById("heart");
 const btn=document.getElementById("storyBtn");
-const lines=["I Love You ❤️","You Are My Forever","Will You Marry Me?"];
+const lines=["Hi Anjali,","You Are My Forever","I Love You ❤️","Will You Marry Me?","❤️"];
 let l=0,ch=0,out="";
 function typeMain(){
   if(ch<lines[l].length){ out+=lines[l][ch++]; textEl.innerHTML=out; setTimeout(typeMain,120); }
@@ -401,7 +430,6 @@ const finalJourneyBtn=document.getElementById("finalJourneyBtn");
 let step=0;
 let isTyping = false;
 let typeTimeout = null;
-
 let currentFullText = "";
 
 btn.onclick=()=> popup.style.display="flex";
@@ -421,29 +449,78 @@ closeBtn.onclick = () => {
 
   if(step===0){
     heading.textContent = "I want to say you something";
-    
     // Long message with scrollbar
     const longMessage = `Hi Anjali,
-            Mujhe pata hai ki ye decision bilkul bhi aasan nahi hai. Ye aapki life ka bahut bada faisla hai, aur main is baat ko poori tarah samajhta hoon.
-            Main aapse ye sab call par kehna chahta tha, lekin baat ho nahi pa rahi thi, isliye mujhe laga ki likh kar apni baat rakhna zyada behtar rahega.
-            Main bas itna kehna chahta hoon ki agar aapko decision lene mein kisi bhi tarah ki confusion ya dikkat ho rahi hai, to aap mujhse bilkul khul kar share kar sakti ho. Hum milkar har cheez ka solution nikaal sakte hain. Main hamesha aapke saath khada hoon.
-            Agar aapko ye lagta hai ki meri family mein aane par aapko kaisa lagega, to main poori zimmedari ke saath keh sakta hoon ki aapko hamare parivaar mein adjust hone mein koi problem nahi hogi. Hamare ghar mein koi restriction nahi hai—sab log pyaar aur khushi se rehte hain.
-            Aur agar phir bhi aapke mann mein koi doubt ho, to main aapki baat apni mummy se bhi karwa sakta hoon. Shayad wo mujhse bhi behtar tareeke se mujhe aur mere parivaar ko samjha paayengi.
-            Agar aap ye soch rahi ho ki aapke bhai ya mummy-papa kya sochenge, to uski bhi zimmedari main leta hoon. Mujhe poora vishwas hai ki waqt aane par sab log khushi-khushi hamari shaadi ko accept karenge.
-            Main aapki situation, aapki zimmedariyaan aur aapki feelings ko samajhta hoon. Aapke parents mere parents jaise hi hain, aur main kabhi bhi kisi bhi tarah ki takleef unhe ya aapko aane nahi dunga. Ye mera promise hai.
-            Agar aap abhi shaadi ke liye ready nahi ho aur kuch saal baad karna chahti ho, to main uske liye bhi poori tarah ready hoon.
-            Mujhe bas aapse itni si clarity chahiye ki aapke mann mein kya chal raha hai, ya phir aapko aur thoda time chahiye.
-            Kyunki mere liye aap aur ye moment dono bahut important hain.
-            Shayad upar wala bhi yahi chahta tha. Meri kuch unhealthy behaviour ki wajah se aapko kaafi hurt hua—wo sab bachpana tha, galtiyan thi. Jab mujhe samajh aaya ki is relationship ko space aur sukoon chahiye, to meri bas ek hi chahat thi—aapka sukoon aur aapki khushi.
-            Isliye maine sab bhagwan par chhod diya tha. Agar unki marzi hogi, to hum phir milenge… aur hum mile—pehle se zyada behtar tareeke se.
-            8 saal ho gaye hain, aur aaj bhi main aapke liye wahi khada hoon.
-            Or agar aap ko lagata hai ki ye sab bate mujhe sath baith ke krna chiaye to aap bata dijiye ki aap kb free hai to me us din aa jau pune ya bhi holi me gov me milna hai jaisa aap ko sahi lage
-            Ab wo waqt aa gaya hai jab mujhe apne dil ki baat aapse kehni thi. Main aapse abhi koi jawab ya decision nahi maang raha hoon—mujhe bas itni si clarity chahiye ki aapko thoda aur time chahiye ya aap kya feel kar rahi ho.
-            Bas itna hi.`;
+
+Mujhe pata hai ki Shadi decision bilkul bhi aasan nahi hai. 
+Ye aapki life ka bahut bada faisla hai, aur main is baat ko poori tarah samajhta hoon.
+
+Main aapse ye sab call par kehna chahta tha, lekin baat ho nahi pa rahi thi,
+isliye mujhe laga ki likh kar apni baat rakhna zyada behtar rahega.
+
+Main bas itna kehna chahta hoon ki agar aapko decision lene mein kisi bhi tarah ki 
+confusion ya dikkat ho rahi hai, to aap mujhse bilkul khul kar share kar sakti ho. 
+Hum milkar har cheez ka solution nikaal sakte hain. Main hamesha aapke saath khada hoon.
+
+Agar aapko ye lagta hai ki meri family mein aane par aapko kaisa lagega,
+to main poori zimmedari ke saath keh sakta hoon ki aapko hamare parivaar mein 
+adjust hone mein koi problem nahi hogi. Hamare ghar mein koi restriction nahi hai—
+sab log pyaar aur khushi se rehte hain.
+
+Aur agar phir bhi aapke mann mein koi doubt ho,
+to main aapki baat apni mummy se bhi karwa sakta hoon.
+Shayad wo mujhse bhi behtar tareeke se aapko aur mere parivaar ko samjha paayengi.
+
+Agar aap ye soch rahi ho ki aapke bhai ya mummy kya sochenge,
+to uski bhi zimmedari main leta hoon. Mujhe poora vishwas hai ki waqt aane par 
+sab log khushi-khushi hamari shaadi ko accept karenge.
+
+Aur main puri koshish karunga ki aapke ghar walon ko manane ki—wo zimmedari main khud leta hoon.
+Usme aapko koi kuch nahi bolenga kabhi bhi.
+Aur aapke "HAA" ka decision—aapki life ka sabse sahi aur pyara decision banane ki puri koshish karunga.
+
+Main aapki situation, aapki zimmedariyaan aur aapki feelings ko samajhta hoon.
+Aapke parents mere parents jaise hi hain, aur main kabhi bhi kisi bhi tarah ki takleef 
+unhe ya aapko aane nahi dunga. Ye mera promise hai.
+
+Agar aap abhi shaadi ke liye ready nahi ho aur kuch saal baad karna chahti ho,
+to main uske liye bhi poori tarah ready hoon.
+
+Mujhe bas aapse itni si clarity chahiye ki aapke mann mein kya chal raha hai,
+ya phir aapko aur thoda time chahiye.
+Kyunki mere liye aap aur ye moment dono bahut important hain.
+
+Shayad upar wala bhi yahi chahta tha.
+Meri kuch unhealthy behaviour ki wajah se aapko kaafi hurt hua—
+wo sab bachpana tha, galtiyan thi.
+Jab mujhe samajh aaya ki is relationship ko space aur sukoon chahiye,
+to meri bas ek hi chahat thi—aapka sukoon aur aapki khushi.
+
+Isliye maine sab bhagwan par chhod diya tha.
+Agar unki marzi hogi, to hum phir milenge… aur hum mile—
+pehle se zyada behtar tareeke se.
+
+8 saal ho gaye hain, aur aaj bhi main aapke liye wahi khada hoon.
+
+Aur agar aap ko lagta hai ki ye sab baatein mujhe saath baith ke karni chahiye,
+to aap bata dijiye ki aap kab free hai—to main us din aa jaunga Pune,
+ya phir Holi mein Gove mein milna hai, jaisa aap ko sahi lage.
+
+Aur mujhe lagta hai ki agar aap kisi aur se shaadi karte hai bina jaane,
+to vo aapko kaisa treat karega?
+Aap hamein jaante ho aur hamare pariwar ko bhi—
+yahan aapko easy feel hoga, aur sab aapko khushi-khushi accept karenge.
+Aapko hamare yahan koi bhi restriction nahi feel hogi—ye promise main deta hoon.
+
+Ab wo waqt aa gaya hai jab mujhe apne dil ki baat aapse kehni thi.
+Main aapse abhi koi jawab ya decision nahi maang raha hoon—
+mujhe bas itni si clarity chahiye ki aapko thoda aur time chahiye 
+ya aap kya feel kar rahi ho.
+
+Bas itna hi.`;
     
     // Add scrollbar styling for this long message only
-    popupText.style.overflowY = 'auto';
-    popupText.style.maxHeight = '300px';
+    popupText.classList.add('long-message');
     
     typeText(longMessage);
     currentFullText = longMessage;
@@ -455,8 +532,7 @@ closeBtn.onclick = () => {
     ring.style.display="block";
     
     // Remove scrollbar for final proposal
-    popupText.style.overflowY = 'visible';
-    popupText.style.maxHeight = 'none';
+    popupText.classList.remove('long-message');
     
     const proposalText = `This ring symbolizes a journey—
             not just of romance, but partnership,
@@ -492,8 +568,9 @@ function typeText(msg){
   (function t(){
     if(i<msg.length && isTyping){
       popupText.textContent+=msg[i++];
+      // Auto-scroll to show the latest text
       popupText.scrollTop = popupText.scrollHeight;
-      typeTimeout = setTimeout(t, 80); // Slightly faster typing
+      typeTimeout = setTimeout(t, 50); // Faster typing speed
     } else {
       isTyping = false;
     }
