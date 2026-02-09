@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
 <style>
 /* --- RESET & BASE --- */
@@ -192,6 +193,218 @@ canvas { position:fixed; inset:0; }
   100% { transform:translateY(0) scale(1); opacity:1; }
 }
 
+/* VIDEO PLAYER - UPDATED STYLES */
+#proposalVideoContainer {
+  display: none;
+  margin: 20px auto;
+  width: clamp(250px, 80vw, 450px);
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 0 25px rgba(255, 20, 147, 0.7);
+  position: relative;
+}
+
+#proposalVideo {
+  width: 100%;
+  height: auto;
+  display: block;
+  background: #000;
+}
+
+/* Video controls */
+.video-controls {
+  background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.7));
+  padding: 15px 10px 10px;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: opacity 0.3s;
+}
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+/* Progress bar */
+.progress-container {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  overflow: hidden;
+  cursor: pointer;
+  margin: 0 5px;
+}
+
+#videoProgress {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(to right, hotpink, gold);
+  border-radius: 3px;
+  transition: width 0.1s;
+  position: relative;
+}
+
+#videoProgress::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 8px hotpink;
+  display: none;
+}
+
+.progress-container:hover #videoProgress::after {
+  display: block;
+}
+
+/* Control buttons */
+.control-btn {
+  background: rgba(255, 20, 147, 0.8);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-size: 18px;
+  box-shadow: 0 0 10px rgba(255, 20, 147, 0.5);
+}
+
+.control-btn:hover {
+  background: rgba(255, 20, 147, 1);
+  transform: scale(1.1);
+  box-shadow: 0 0 15px hotpink;
+}
+
+.control-btn i {
+  font-size: 18px;
+}
+
+.time-display {
+  color: white;
+  font-size: 14px;
+  font-family: monospace;
+  min-width: 100px;
+  text-align: center;
+  text-shadow: 0 0 5px rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.5);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+/* Volume controls */
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 5px;
+}
+
+.volume-slider {
+  width: 70px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+}
+
+.volume-slider-fill {
+  height: 100%;
+  width: 80%;
+  background: linear-gradient(to right, pink, hotpink);
+  border-radius: 2px;
+}
+
+.volume-slider-handle {
+  position: absolute;
+  right: 20%;
+  top: 50%;
+  transform: translate(50%, -50%);
+  width: 12px;
+  height: 12px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 5px hotpink;
+  display: none;
+}
+
+.volume-slider:hover .volume-slider-handle {
+  display: block;
+}
+
+/* Continue button below video */
+#continueAfterVideo {
+  margin: 20px auto 0;
+  padding: 12px 30px;
+  border: none;
+  border-radius: 25px;
+  background: linear-gradient(45deg, #ff1493, #ff6b9d);
+  color: white;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  display: none;
+  opacity: 0.6;
+  transition: all 0.3s;
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+#continueAfterVideo::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+#continueAfterVideo.enabled {
+  opacity: 1;
+  cursor: pointer;
+  box-shadow: 0 0 25px hotpink;
+  background: linear-gradient(45deg, hotpink, #ff3366);
+  animation: pulseButton 2s infinite;
+}
+
+@keyframes pulseButton {
+  0%, 100% { box-shadow: 0 0 25px hotpink; }
+  50% { box-shadow: 0 0 35px hotpink, 0 0 45px rgba(255, 20, 147, 0.5); }
+}
+
+#continueAfterVideo.enabled:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 30px hotpink;
+}
+
+#continueAfterVideo.enabled:hover::before {
+  left: 100%;
+}
+
+#continueAfterVideo i {
+  margin-right: 8px;
+}
+
 /* BUTTON CLOSE */
 #closeBtn {
   margin-top:20px;
@@ -242,6 +455,12 @@ canvas { position:fixed; inset:0; }
   #popupContent { padding:15px; }
   #popupText { font-size:0.95rem; line-height:1.5; }
   .celebrationContent { padding:30px 20px; }
+  .video-controls { padding: 10px 8px 8px; }
+  .control-btn { width: 36px; height: 36px; }
+  .control-btn i { font-size: 16px; }
+  .time-display { min-width: 80px; font-size: 12px; }
+  .volume-slider { width: 50px; }
+  #continueAfterVideo { padding: 10px 20px; font-size: 1rem; }
 }
 
 /* FINAL MESSAGE STYLES */
@@ -346,6 +565,46 @@ canvas { position:fixed; inset:0; }
       <img src="./Prapose.png" id="proposalImg">
     </div>
 
+    <!-- VIDEO PLAYER WITH CONTROLS -->
+    <div id="proposalVideoContainer">
+      <video id="proposalVideo" autoplay>
+        <source src="./Message.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      
+      <!-- Video Controls -->
+      <div class="video-controls">
+        <div class="controls-row">
+          <button class="control-btn" id="playPauseBtn">
+            <i class="fas fa-play"></i>
+          </button>
+          <button class="control-btn" id="replayBtn">
+            <i class="fas fa-redo"></i>
+          </button>
+          <div class="time-display" id="timeDisplay">0:00 / 0:00</div>
+          <div class="volume-control">
+            <button class="control-btn" id="volumeBtn" style="width: 36px; height: 36px;">
+              <i class="fas fa-volume-up"></i>
+            </button>
+            <div class="volume-slider" id="volumeSlider">
+              <div class="volume-slider-fill"></div>
+              <div class="volume-slider-handle"></div>
+            </div>
+          </div>
+        </div>
+        <div class="controls-row">
+          <div class="progress-container" id="progressContainer">
+            <div id="videoProgress"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Continue Button (appears below video) -->
+    <button id="continueAfterVideo">
+      <i class="fas fa-heart"></i> Continue to Proposal
+    </button>
+
     <div id="ring"></div>
     <button id="closeBtn">Unfold My Heart ❤️</button>
   </div>
@@ -370,6 +629,36 @@ canvas { position:fixed; inset:0; }
 </div>
 
 <script>
+// --- BACKGROUND AUDIO ---
+const backgroundAudio = new Audio("https://github.com/princeprajapati106/Forever-Yours/raw/main/Sound.mp3");
+backgroundAudio.loop = true;
+backgroundAudio.volume = 1;
+backgroundAudio.volume = 0.5;
+let isAudioPlaying = false;
+
+// Function to play background audio (ONLY for Final Proposal step)
+function playBackgroundAudio() {
+  if (!isAudioPlaying && step === 3) { // केवल Final Proposal step में
+    backgroundAudio.currentTime = 0;
+    backgroundAudio.play().then(() => {
+      isAudioPlaying = true;
+      console.log("Background audio started playing in Final Proposal step");
+    }).catch(error => {
+      console.log("Audio play failed:", error);
+    });
+  }
+}
+
+// Function to stop background audio
+function stopBackgroundAudio() {
+  if (isAudioPlaying) {
+    backgroundAudio.pause();
+    backgroundAudio.currentTime = 0;
+    isAudioPlaying = false;
+    console.log("Background audio stopped");
+  }
+}
+
 // --- CANVAS PARTICLES ---
 const canvas=document.querySelector("canvas");
 const c=canvas.getContext("2d");
@@ -423,6 +712,170 @@ function typeMain(){
 }
 setTimeout(typeMain,1000);
 
+// --- VIDEO CONTROLS LOGIC ---
+const video = document.getElementById('proposalVideo');
+const playPauseBtn = document.getElementById('playPauseBtn');
+const replayBtn = document.getElementById('replayBtn');
+const volumeBtn = document.getElementById('volumeBtn');
+const volumeSlider = document.getElementById('volumeSlider');
+const progressBar = document.getElementById('videoProgress');
+const progressContainer = document.getElementById('progressContainer');
+const timeDisplay = document.getElementById('timeDisplay');
+const continueAfterVideo = document.getElementById('continueAfterVideo');
+
+let isVideoPlaying = false;
+let isMuted = false;
+let lastVolume = 1;
+
+// Format time (seconds to mm:ss)
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = Math.floor(seconds % 60);
+  return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// Update progress bar and time display
+function updateVideoProgress() {
+  if (video.duration) {
+    const progressPercent = (video.currentTime / video.duration) * 100;
+    progressBar.style.width = `${progressPercent}%`;
+    
+    // Update time display
+    timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(video.duration)}`;
+  }
+}
+
+// Update volume slider
+function updateVolumeSlider() {
+  const volumeFill = volumeSlider.querySelector('.volume-slider-fill');
+  volumeFill.style.width = `${video.volume * 100}%`;
+  
+  const volumeHandle = volumeSlider.querySelector('.volume-slider-handle');
+  volumeHandle.style.right = `${100 - (video.volume * 100)}%`;
+}
+
+// Play/Pause toggle
+playPauseBtn.addEventListener('click', () => {
+  if (video.paused) {
+    video.play();
+    playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    isVideoPlaying = true;
+  } else {
+    video.pause();
+    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    isVideoPlaying = false;
+  }
+});
+
+// Replay button
+replayBtn.addEventListener('click', () => {
+  video.currentTime = 0;
+  video.play();
+  playPauseBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  isVideoPlaying = true;
+  continueAfterVideo.classList.remove('enabled');
+  continueAfterVideo.disabled = true;
+});
+
+// Volume button
+volumeBtn.addEventListener('click', () => {
+  if (isMuted) {
+    video.volume = lastVolume;
+    volumeBtn.innerHTML = video.volume > 0.5 ? '<i class="fas fa-volume-up"></i>' : 
+                         video.volume > 0 ? '<i class="fas fa-volume-down"></i>' : 
+                         '<i class="fas fa-volume-mute"></i>';
+    isMuted = false;
+  } else {
+    lastVolume = video.volume;
+    video.volume = 0;
+    volumeBtn.innerHTML = '<i class="fas fa-volume-mute"></i>';
+    isMuted = true;
+  }
+  updateVolumeSlider();
+});
+
+// Volume slider
+volumeSlider.addEventListener('click', (e) => {
+  const rect = volumeSlider.getBoundingClientRect();
+  const pos = (e.clientX - rect.left) / rect.width;
+  const volume = Math.max(0, Math.min(1, pos));
+  
+  video.volume = volume;
+  lastVolume = volume;
+  isMuted = volume === 0;
+  
+  volumeBtn.innerHTML = volume > 0.5 ? '<i class="fas fa-volume-up"></i>' : 
+                       volume > 0 ? '<i class="fas fa-volume-down"></i>' : 
+                       '<i class="fas fa-volume-mute"></i>';
+  
+  updateVolumeSlider();
+});
+
+// Progress bar click to seek
+progressContainer.addEventListener('click', (e) => {
+  const rect = progressContainer.getBoundingClientRect();
+  const pos = (e.clientX - rect.left) / rect.width;
+  video.currentTime = pos * video.duration;
+});
+
+// Video events
+video.addEventListener('timeupdate', updateVideoProgress);
+
+video.addEventListener('loadedmetadata', () => {
+  timeDisplay.textContent = `0:00 / ${formatTime(video.duration)}`;
+  updateVolumeSlider();
+});
+
+video.addEventListener('volumechange', () => {
+  updateVolumeSlider();
+});
+
+video.addEventListener('ended', () => {
+  playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+  isVideoPlaying = false;
+  // Enable continue button
+  continueAfterVideo.classList.add('enabled');
+  continueAfterVideo.disabled = false;
+  continueAfterVideo.style.display = 'block';
+});
+
+// Continue button click
+continueAfterVideo.addEventListener('click', () => {
+  if (!continueAfterVideo.disabled) {
+    videoContainer.style.display = 'none';
+    continueAfterVideo.style.display = 'none';
+    
+    // Show final proposal
+    heading.textContent="Final Proposal";
+    heartWrap.style.display="block";
+    ring.style.display="block";
+    ring.innerHTML = "💍";
+    
+    // Remove scrollbar for final proposal
+    popupText.classList.remove('long-message');
+    
+    const proposalText = `This ring symbolizes a journey—
+            not just of romance, but partnership,
+            growth, and a love that grows deeper with time.
+
+            I can't imagine my future without you in it.
+            Will you be my wife? 💖💍`;
+    typeText(proposalText);
+    currentFullText = proposalText;
+    closeBtn.style.display = "block";
+    closeBtn.textContent="💖 Yes, I Will! 💖";
+    
+    // Update step to final proposal step
+    step = 3;
+    
+    // ✅ AUDIO: Play ONLY in Final Proposal step
+    // थोड़ा delay देकर audio play करें
+    setTimeout(() => {
+      playBackgroundAudio();
+    }, 500);
+  }
+});
+
 // --- POPUP LOGIC ---
 const popup=document.getElementById("popup");
 const heading=document.getElementById("popupHeading");
@@ -430,6 +883,7 @@ const popupText=document.getElementById("popupText");
 const ring=document.getElementById("ring");
 const closeBtn=document.getElementById("closeBtn");
 const heartWrap=document.getElementById("heartWrap");
+const videoContainer = document.getElementById("proposalVideoContainer");
 const celebrationScreen=document.getElementById("celebrationScreen");
 const finalJourneyBtn=document.getElementById("finalJourneyBtn");
 
@@ -440,18 +894,25 @@ let currentFullText = "";
 
 btn.onclick=()=> popup.style.display="flex";
 
+// MAIN CLOSE BUTTON CLICK HANDLER
 closeBtn.onclick = () => {
   // Cancel any ongoing typing
   if (isTyping) {
     isTyping = false;
     if (typeTimeout) clearTimeout(typeTimeout);
-    // Show full text immediately
     popupText.textContent = currentFullText;
     popupText.scrollTop = popupText.scrollHeight;
   }
   
   ring.style.display="none";
   heartWrap.style.display="none";
+  videoContainer.style.display = "none";
+  continueAfterVideo.style.display = "none";
+  
+  // ✅ AUDIO: Stop when moving away from Final Proposal
+  if (step === 3) {
+    stopBackgroundAudio();
+  }
 
   if(step===0){
     heading.textContent = "I Want To Share Something Special";
@@ -530,27 +991,47 @@ Bas itna hi.`;
     
     typeText(longMessage);
     currentFullText = longMessage;
-    closeBtn.textContent="💕 Continue to Proposal";
+    closeBtn.textContent="💕 Continue";
     step++;
   } else if(step===1){
-    heading.textContent="Final Proposal";
-    heartWrap.style.display="block";
-    ring.style.display="block";
+    // STEP 2: SHOW VIDEO PLAYER
+    heading.textContent="A Special Video for You";
+    popupText.textContent = "Before the final proposal, please watch this special video message from my heart... ❤️";
     
-    // Remove scrollbar for final proposal
+    // Remove scrollbar for video message
     popupText.classList.remove('long-message');
     
-    const proposalText = `This ring symbolizes a journey—
-            not just of romance, but partnership,
-            growth, and a love that grows deeper with time.
-
-            I can't imagine my future without you in it.
-            Will you be my wife? 💖💍`;
-    typeText(proposalText);
-    currentFullText = proposalText;
-    closeBtn.textContent="💖 Yes, I Will! 💖";
-    step++;
+    // Hide previous elements
+    heartWrap.style.display="none";
+    ring.style.display="none";
+    
+    // Show video player
+    videoContainer.style.display = "block";
+    closeBtn.style.display = "none"; // Hide the main close button
+    
+    // Reset video
+    video.currentTime = 0;
+    video.pause();
+    playPauseBtn.innerHTML = '<i class="fas fa-play"></i>';
+    isVideoPlaying = false;
+    
+    // Reset continue button
+    continueAfterVideo.classList.remove('enabled');
+    continueAfterVideo.disabled = true;
+    continueAfterVideo.style.display = 'block';
+    
+    step++; // Move to next step (video watching step)
   } else if(step===2){
+    // STEP 3: SHOW FINAL PROPOSAL
+    if (!video.ended) {
+      // If video hasn't ended, show message
+      alert("Please watch the video first to continue...");
+      return;
+    }
+    
+    // This should now be handled by the continueAfterVideo button
+    // So we shouldn't reach here directly
+  } else if(step===3){
     // Accept button clicked - show celebration screen directly
     popup.style.display="none";
     celebrationScreen.style.display="flex";
@@ -574,9 +1055,8 @@ function typeText(msg){
   (function t(){
     if(i<msg.length && isTyping){
       popupText.textContent+=msg[i++];
-      // Auto-scroll to show the latest text
       popupText.scrollTop = popupText.scrollHeight;
-      typeTimeout = setTimeout(t, 50); // Faster typing speed
+      typeTimeout = setTimeout(t, 50);
     } else {
       isTyping = false;
     }
@@ -585,6 +1065,9 @@ function typeText(msg){
 
 // --- FINAL JOURNEY BUTTON ---
 finalJourneyBtn.onclick = () => {
+  // ✅ AUDIO: Stop when moving to final message
+  stopBackgroundAudio();
+  
   celebrationScreen.style.display = "none";
   
   // Create final celebration with more particles
@@ -611,6 +1094,13 @@ finalJourneyBtn.onclick = () => {
   `;
   document.body.appendChild(finalMsg);
 };
+
+// Auto-play audio on user interaction (for browser policies)
+document.addEventListener('click', function initAudio() {
+  // Preload the audio
+  backgroundAudio.load();
+  document.removeEventListener('click', initAudio);
+});
 </script>
 
 </body>
